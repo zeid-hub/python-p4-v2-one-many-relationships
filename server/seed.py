@@ -21,27 +21,21 @@ with app.app_context():
 
     # 1..many relationship between Employee and Review
     uri_2023 = Review(year=2023,
-                      summary="Great web developer!",
-                      employee=uri)
+                      summary="Great web developer!")
     tristan_2021 = Review(year=2021,
-                          summary="Good coding skills, often late to work",
-                          employee=tristan)
+                          summary="Good coding skills, often late to work")
     tristan_2022 = Review(year=2022,
-                          summary="Strong coding skills, takes long lunches",
-                          employee=tristan)
+                          summary="Strong coding skills, takes long lunches")
     tristan_2023 = Review(year=2023,
-                          summary="Awesome coding skills, dedicated worker",
-                          employee=tristan)
+                          summary="Awesome coding skills, dedicated worker")
     db.session.add_all([uri_2023, tristan_2021, tristan_2022, tristan_2023])
     db.session.commit()
 
     # 1..1 relationship between Employee and Onboarding
     uri_onboarding = Onboarding(
-        orientation=datetime.datetime(2023, 3, 27),
-        employee=uri)
+        orientation=datetime.datetime(2023, 3, 27))
     tristan_onboarding = Onboarding(
         orientation=datetime.datetime(2020, 1, 20, 14, 30),
-        forms_complete=True,
-        employee=tristan)
+        forms_complete=True)
     db.session.add_all([uri_onboarding, tristan_onboarding])
     db.session.commit()
