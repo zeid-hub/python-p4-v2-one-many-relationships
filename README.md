@@ -2,8 +2,8 @@
 
 ## Learning Goals
 
-- Use Flask-SQLAlchemy to join tables with one-to-one, one-to-many, and
-  many-to-many relationships.
+- Use Flask-SQLAlchemy to join models with one-to-one and one-to-many
+  relationships.
 
 ---
 
@@ -15,7 +15,8 @@ queries that join two tables to combine rows that are related based on foreign
 keys.
 
 In this lesson, we'll explore how Flask-SQLAlchemy makes it easy to establish
-and use relationships between models, without having to write SQL.
+and use relationships between models, without having to write SQL. We'll
+implement a **one-to-many** and a **one-to-one** relationship between models.
 
 Flask-SQLAlchemy uses a `ForeignKey` column to constrain and join data models, a
 `relationship()` method that allows one model to access its related model, and a
@@ -126,17 +127,19 @@ Let's update the data model to add two relationships.
 
 ![employee one-to-many erd](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/employee_one_many.png)
 
-**One-to-many** relationship between `Employee` and `Review`.
+We will add a **one-to-many** relationship between `Employee` and `Review`. A
+**one-to-one** relationship is also referred to as a **has many/belongs to**
+relationship.
 
 - `Employee -< Reveiw`
-- An `Employee` instance is associated with many `Review` instances.
-- A `Review` instance is associated with one `Employee` instance.
+- An employee **has many** reviews.
+- A review **belongs to** one employee.
 
-**One-to-one** relationship between `Employee` and `Onboarding`.
+We will add a **one-to-one** relationship between `Employee` and `Onboarding`.
 
 - `Employee -- Onboarding`
-- An `Employee` instance is associated with one `Onboarding` instance.
-- An `Onboarding` instance is associated with one `Employee` instance.
+- An employee **has one** onboarding.
+- An onboarding **belongs to** one employee.
 
 ## One-To-Many Relationship
 
