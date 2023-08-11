@@ -123,19 +123,21 @@ initial seed data using a VS Code extension such as SQLite Viewer:
 
 ## Relational Data Model
 
-Let's update the data model to add two relationships.
+Let's update the initial data model to add two relationships.
 
 ![employee one-to-many erd](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/employee_one_many.png)
 
 We will add a **one-to-many** relationship between `Employee` and `Review`. A
-**one-to-one** relationship is also referred to as a **has many/belongs to**
+**one-to-many** relationship is also referred to as a **has many/belongs to**
 relationship.
 
 - `Employee -< Reveiw`
 - An employee **has many** reviews.
 - A review **belongs to** one employee.
 
-We will add a **one-to-one** relationship between `Employee` and `Onboarding`.
+We will add a **one-to-one** relationship between `Employee` and `Onboarding`. A
+**one-to-one** relationship is also referred to as a **has one/belongs to**
+relationship.
 
 - `Employee -- Onboarding`
 - An employee **has one** onboarding.
@@ -163,8 +165,8 @@ to access and update both sides of the relationship within our application. We
 will establish a bidirectional relationship between two models (one-to-many and
 many-to-one) by making the following updates:
 
-1. Add a foreign key column to the model on the "many" side to store the
-   one-to-many relationship.
+1. Add a foreign key column to the model on the "many" or "belongs to" side to
+   store the one-to-many relationship.
 2. Add a relationship to the model on the "one" side to reference a list of
    associated objects from the "many" side.
 3. Add a reciprocal relationship to the model on the "many" side and connect
@@ -176,15 +178,17 @@ update does to the data model.
 
 ### Update #1 : Add a foreign key column to the `Review` model to store the one-to-many relationship.
 
+An employee **has many** reviews. A review **belongs to** one employee.
+
 The initial schema did not include a foreign key reference to an employee in the
 `reviews` table. Each row contains an annual performance review for one
 employee, but the data does not tell us which employee the review is for!
 
 ![initial review table without foreign key](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/init_review.png)
 
-Since `Review` is on the many side, it is responsible for storing the
-relationship. Edit the `Review` model to add the attribute `employee_id` to
-store a foreign key column:
+Since `Review` is on the many or **belongs to** side, it is responsible for
+storing the relationship. Edit the `Review` model to add the attribute
+`employee_id` to store a foreign key column:
 
 ```py
 class Review(db.Model):
@@ -504,28 +508,27 @@ explicit `relationship()` constructs is generally recommended.
 
 A one-to-one relationship is implemented in a similar manner as a one-to-many.
 
-With a one-to-many relationship, the model on the "many" side stored the foreign
-key, which makes it the owner of the relationship.
+A one-to-one relationship is also called a "has one/belongs to" relationship.
+With a one-to-one relationship, you will pick one model to be on the "belongs
+to" side of the relationship (you can pick either model). The model on the
+"belongs to" side will store the foreign key.
 
-With a one-to-one relationship, you will pick one model to own the relationship
-(you can pick either model). The model on the owning side will store the foreign
-key.
+Let's pick the `Onboarding` model to be on the **belongs to** side of the
+relationship.
 
-Let's pick the `Onboarding` model to own the relationship.
-
-![one to one relationship owning side](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/one_one_owning.png)
+![one to one relationship owning side](https://curriculum-content.s3.amazonaws.com/7159/python-p4-v2-flask-sqlalchemy/one_one_belongsto.png)
 
 We'll need to make the following updates to the data model:
 
-1. Add a foreign key column to the model on the "owning" side to store the
+1. Add a foreign key column to the model on the "belongs to" side to store the
    one-to-one relationship.
-2. Add a relationship with `uselist=False` to the model on the "non-owning" side
-   to reference the associated object on the "owning" side.
-3. Add a reciprocal relationship to the model on the "owning" side and connect
-   both relationships using the `back_populates` property.
+2. Add a relationship with `uselist=False` to the model on the "has one" side to
+   reference the associated object on the "belongs to" side.
+3. Add a reciprocal relationship to the model on the "belongs to" side and
+   connect both relationships using the `back_populates` property.
 
-Since `Onboarding` is on the owning side, update the model to add a foreign key
-column and a relationship:
+Since `Onboarding` is on the "belongs to" side, update the model to add a
+foreign key column and a relationship:
 
 ```py
 class Onboarding(db.Model):
@@ -545,10 +548,10 @@ class Onboarding(db.Model):
         return f'<Onboarding {self.id}, {self.orientation}, {self.forms_complete}>'
 ```
 
-`Employee` is on the non-owning side. You need to specify the `uselist`
-parameter in the non-owning side of a one-to-one relationship. Update the
-`Employee` model to add a relationship with the parameter `uselist=False`. This
-ensures the relationship maps to a single related object rather than a list.
+`Employee` is on the "has one" side. You need to specify the `uselist` parameter
+in the "has one" side of a one-to-one relationship. Update the `Employee` model
+to add a relationship with the parameter `uselist=False`. This ensures the
+relationship maps to a single related object rather than a list.
 
 ```py
 class Employee(db.Model):
@@ -729,7 +732,7 @@ We probably want a similar cascade between `Employee` and `Onboarding`. Since an
 ## Conclusion
 
 In this lesson, we focused on the most common kind of relationship between two
-models: the **one-to-many** relationship.
+models: the **one-to-many** or **has many/belongs to** relationship.
 
 We establish a bidirectional relationship between two models (one-to-many and
 many-to-one) by making the following updates:
@@ -741,8 +744,9 @@ many-to-one) by making the following updates:
 3. Add a reciprocal relationship to the model on the "many" side and connect
    both relationships using the `back_populates` property.
 
-We also saw how to implement a **one-to-one** relationship by using the
-`useList=False` parameter in the relationship on the non-owning side.
+We also saw how to implement a **one-to-one** or **has one/belongs to**
+relationship by using the `useList=False` parameter in the relationship on the
+"has one" side of the relationship.
 
 With a solid understanding of how to connect tables using primary and foreign
 keys, we can take advantage of some helpful Flask-SQLAlchemy methods that make
