@@ -247,7 +247,7 @@ value.
 
 ```console
 $ flask shell
->>> review1 = Review.query.get(1)
+>>> review1 = Review.query.filter_by(id = 1).first()
 >>> review1.employee_id
 None
 >>> exit()
@@ -293,7 +293,7 @@ You can also use the Flask shell to confirm the employee id.
 
 ```console
 $ flask shell
->>> review1 = Review.query.get(1)
+>>> review1 = Review.query.filter_by(id = 1).first()
 >>> review1.employee_id
 1
 >>> exit()
@@ -338,10 +338,10 @@ property. Test this out with the Flask shell:
 
 ```console
 $ flask shell
->>> uri = Employee.query.get(1)
+>>> uri = Employee.query.filter_by(id = 1).first()
 >>> uri.reviews
 [<Review 1, 2023, Great web developer!>]
->>> tristan = Employee.query.get(2)
+>>> tristan = Employee.query.filter_by(id = 2).first()
 >>> tristan.reviews
 [<Review 2, 2021, Good coding skills, often late to work>, <Review 3, 2022, Strong coding skills, takes long lunches>, <Review 4, 2023, Awesome coding skills, dedicated worker>]
 >>>
@@ -408,11 +408,11 @@ review:
 ```console
 $ flask shell
 >>> from models import db, Employee, Review
->>> tristan = Employee.query.get(2)
+>>> tristan = Employee.query.filter_by(id = 2).first()
 >>> #Get list of reviews for an employee
 >>> tristan.reviews
 [<Review 2, 2021, Good coding skills, often late to work>, <Review 3, 2022, Strong coding skills, takes long lunches>, <Review 4, 2023, Awesome coding skills, dedicated worker>]
->>> tristan_2021 = Review.query.get(2)
+>>> tristan_2021 = Review.query.filter_by(id = 2).first()
 >>> #Get employee for a review
 >>> tristan_2021.employee
 <Employee 2, Tristan Tal, 2020-01-30>
@@ -621,13 +621,13 @@ Now we can explore the one-to-one relationship using Flask shell.
 ```console
 $ flask shell
 >>> from models import db, Employee, Review, Onboarding
->>> employee = Employee.query.get(1)
+>>> employee = Employee.query.filter_by(id = 1).first()
 >>> employee
 <Employee 1, Uri Lee, 2022-05-17>
 >>> # employee related to one onboarding
 >>> employee.onboarding
 <Onboarding 1, 2023-03-27 00:00:00, False>
->>> onboarding = Onboarding.query.get(1)
+>>> onboarding = Onboarding.query.filter_by(id = 1).first()
 >>> # onboarding related to one employee
 >>> onboarding.employee
 <Employee 1, Uri Lee, 2022-05-17>
@@ -701,7 +701,7 @@ We can confirm this by deleting a review from an employee's list of reviews.
 ```console
 >>> Review.query.all()
 [<Review 1, 2023, Great web developer!>, <Review 2, 2021, Good coding skills, often late to work>, <Review 3, 2022, Strong coding skills, takes long lunches>, <Review 4, 2023, Awesome coding skills, dedicated worker>]
->>> uri = Employee.query.get(1)
+>>> uri = Employee.query.filter_by(id = 1).first()
 >>> uri.reviews
 [<Review 1, 2023, Great web developer!>]
 >>> # Remove review from list
