@@ -106,7 +106,7 @@ class Review(db.Model):
   `Employee` model directly, it is seldom used and thus abstracted into a
   separate model.
 
-Run the following commands to create and seed the `employees` table with sample
+Run the following commands to create and seed the three tables with sample
 data.
 
 ```console
@@ -131,7 +131,7 @@ We will add a **one-to-many** relationship between `Employee` and `Review`. A
 **one-to-many** relationship is also referred to as a **has many/belongs to**
 relationship.
 
-- `Employee -< Reveiw`
+- `Employee -< Review`
 - An employee **has many** reviews.
 - A review **belongs to** one employee.
 
